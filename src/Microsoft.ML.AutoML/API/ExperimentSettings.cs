@@ -9,7 +9,7 @@ namespace Microsoft.ML.AutoML
 {
     /// <summary>
     /// Base class for experiment settings. All task-specific AutoML experiment settings
-    /// (like <see cref="BinaryExperimentSettings"/>) inherit from this class.
+    /// (like <see cref="AnomalyDetectionExperimentSettings"/>) inherit from this class.
     /// </summary>
     public abstract class ExperimentSettings
     {

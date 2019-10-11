@@ -25,7 +25,7 @@ namespace Microsoft.ML.AutoML
         /// Best run in this experiment.
         /// </summary>
         /// <remarks>
-        /// AutoML considers the optimizing metric (like <see cref="BinaryExperimentSettings.OptimizingMetric"/>)
+        /// AutoML considers the optimizing metric (like <see cref="AnomalyDetectionExperimentSettings.OptimizingMetric"/>)
         /// when determining the best run.
         /// </remarks>
         public readonly RunDetail<TMetrics> BestRun;

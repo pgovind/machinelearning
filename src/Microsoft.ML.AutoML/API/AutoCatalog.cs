@@ -89,6 +89,41 @@ namespace Microsoft.ML.AutoML
         }
 
         /// <summary>
+        /// Creates a new AutoML experiment to run on an anomaly detection dataset.
+        /// </summary>
+        /// <param name="maxExperimentTimeInSeconds">Maximum number of seconds that experiment will run.</param>
+        /// <returns>A new AutoML anomaly detection experiment.</returns>
+        /// <remarks>
+        /// <para>See <see cref="AnomalyDetectionExperiment"/> for a more detailed code example of an AutoML anomaly detection experiment.</para>
+        /// <para>An experiment may run for longer than <paramref name="maxExperimentTimeInSeconds"/>.
+        /// This is because once AutoML starts training an ML.NET model, AutoML lets the
+        /// model train to completion. For instance, if the first model
+        /// AutoML trains takes 4 hours, and the second model trained takes 5 hours,
+        /// but <paramref name="maxExperimentTimeInSeconds"/> was the number of seconds in 6 hours,
+        /// the experiment will run for 4 + 5 = 9 hours (not 6 hours).</para>
+        /// </remarks>
+        public AnomalyDetectionExperiment CreateAnomalyDetectionExperiment(uint maxExperimentTimeInSeconds)
+        {
+            return new AnomalyDetectionExperiment(_context, new AnomalyDetectionExperimentSettings()
+            {
+                MaxExperimentTimeInSeconds = maxExperimentTimeInSeconds
+            });
+        }
+
+        /// <summary>
+        /// Creates a new AutoML experiment to run on an anomaly detection dataset.
+        /// </summary>
+        /// <param name="experimentSettings">Settings for the AutoML experiment.</param>
+        /// <returns>A new AutoML anomaly detection experiment.</returns>
+        /// <remarks>
+        /// See <see cref="AnomalyDetectionExperiment"/> for a more detailed code example of an AutoML binary classification experiment.
+        /// </remarks>
+        public AnomalyDetectionExperiment CreateAnomalyDetectionExperiment(AnomalyDetectionExperimentSettings experimentSettings)
+        {
+            return new AnomalyDetectionExperiment(_context, experimentSettings);
+        }
+
+        /// <summary>
         /// Creates a new AutoML experiment to run on a multiclass classification dataset.
         /// </summary>
         /// <param name="maxExperimentTimeInSeconds">Maximum number of seconds that experiment will run.</param>

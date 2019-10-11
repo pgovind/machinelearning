@@ -280,6 +280,34 @@ namespace Microsoft.ML.AutoML
             }
         }
 
+        public static TrainerName GetTrainerName(AnomalyDetectionTrainer anomalyDetectionTrainer)
+        {
+            switch (anomalyDetectionTrainer)
+            {
+                case AnomalyDetectionTrainer.AveragedPerceptron:
+                    return TrainerName.AveragedPerceptronBinary;
+                case AnomalyDetectionTrainer.FastForest:
+                    return TrainerName.FastForestBinary;
+                case AnomalyDetectionTrainer.FastTree:
+                    return TrainerName.FastTreeBinary;
+                case AnomalyDetectionTrainer.LightGbm:
+                    return TrainerName.LightGbmBinary;
+                case AnomalyDetectionTrainer.LinearSvm:
+                    return TrainerName.LinearSvmBinary;
+                case AnomalyDetectionTrainer.LbfgsLogisticRegression:
+                    return TrainerName.LbfgsLogisticRegressionBinary;
+                case AnomalyDetectionTrainer.SdcaLogisticRegression:
+                    return TrainerName.SdcaLogisticRegressionBinary;
+                case AnomalyDetectionTrainer.SgdCalibrated:
+                    return TrainerName.SgdCalibratedBinary;
+                case AnomalyDetectionTrainer.SymbolicSgdLogisticRegression:
+                    return TrainerName.SymbolicSgdLogisticRegressionBinary;
+            }
+
+            // never expected to reach here
+            throw new NotSupportedException($"{anomalyDetectionTrainer} not supported");
+        }
+
         public static TrainerName GetTrainerName(BinaryClassificationTrainer binaryTrainer)
         {
             switch (binaryTrainer)
@@ -367,6 +395,11 @@ namespace Microsoft.ML.AutoML
         public static IEnumerable<TrainerName> GetTrainerNames(IEnumerable<BinaryClassificationTrainer> binaryTrainers)
         {
             return binaryTrainers?.Select(t => GetTrainerName(t));
+        }
+
+        public static IEnumerable<TrainerName> GetTrainerNames(IEnumerable<AnomalyDetectionTrainer> anomalyDetectionTrainers)
+        {
+            return anomalyDetectionTrainers?.Select(t => GetTrainerName(t));
         }
 
         public static IEnumerable<TrainerName> GetTrainerNames(IEnumerable<MulticlassClassificationTrainer> multiTrainers)

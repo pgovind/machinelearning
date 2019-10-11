@@ -21,6 +21,10 @@ namespace Microsoft.ML.AutoML
         {
         };
 
+        private static AnomalyDetectionMetric[] _minimizingAnomalyDetectionMetric = new AnomalyDetectionMetric[]
+        {
+        };
+
         private static MulticlassClassificationMetric[] _minimizingMulticlassMetrics = new MulticlassClassificationMetric[]
         {
             MulticlassClassificationMetric.LogLoss,
@@ -39,6 +43,11 @@ namespace Microsoft.ML.AutoML
         public OptimizingMetricInfo(MulticlassClassificationMetric multiMetric)
         {
             IsMaximizing = !_minimizingMulticlassMetrics.Contains(multiMetric);
+        }
+
+        public OptimizingMetricInfo(AnomalyDetectionMetric anomalyMetric)
+        {
+            IsMaximizing = !_minimizingAnomalyDetectionMetric.Contains(anomalyMetric);
         }
     }
 }
