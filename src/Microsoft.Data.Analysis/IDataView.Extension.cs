@@ -11,67 +11,76 @@ namespace Microsoft.Data.Analysis
 {
     public static class IDataViewExtensions
     {
-        public static DataFrame ToDataFrame(this IDataView dataView)
+        public static DataFrame ToDataFrame(this IDataView dataView, long maxRows = -1, params string[] selectColumns)
         {
             DataViewSchema schema = dataView.Schema;
             List<DataFrameColumn> columns = new List<DataFrameColumn>(schema.Count);
 
+            HashSet<string> selectColumnsSet = null;
+            if (selectColumns != null && selectColumns.Length > 0)
+            {
+                selectColumnsSet = new HashSet<string>(selectColumns);
+            }
+
             List<DataViewSchema.Column> activeColumns = new List<DataViewSchema.Column>();
             foreach (DataViewSchema.Column column in schema)
             {
-                if (column.IsHidden)
+                long length = maxRows >= 0 ? maxRows : long.MaxValue;
+                length = Math.Min(length, dataView.GetRowCount() ?? 0);
+                if (column.IsHidden || (selectColumnsSet != null && !selectColumnsSet.Contains(column.Name)))
                 {
                     continue;
                 }
+
                 activeColumns.Add(column);
                 DataViewType type = column.Type;
                 if (type == BooleanDataViewType.Instance)
                 {
-                    columns.Add(new PrimitiveDataFrameColumn<bool>(column.Name, dataView.GetRowCount() ?? 0));
+                    columns.Add(new BooleanDataFrameColumn(column.Name, length));
                 }
                 else if (type == NumberDataViewType.Byte)
                 {
-                    columns.Add(new PrimitiveDataFrameColumn<byte>(column.Name, dataView.GetRowCount() ?? 0));
+                    columns.Add(new ByteDataFrameColumn(column.Name, length));
                 }
                 else if (type == NumberDataViewType.Double)
                 {
-                    columns.Add(new PrimitiveDataFrameColumn<double>(column.Name, dataView.GetRowCount() ?? 0));
+                    columns.Add(new DoubleDataFrameColumn(column.Name, length));
                 }
                 else if (type == NumberDataViewType.Single)
                 {
-                    columns.Add(new PrimitiveDataFrameColumn<float>(column.Name, dataView.GetRowCount() ?? 0));
+                    columns.Add(new SingleDataFrameColumn(column.Name, length));
                 }
                 else if (type == NumberDataViewType.Int32)
                 {
-                    columns.Add(new PrimitiveDataFrameColumn<int>(column.Name, dataView.GetRowCount() ?? 0));
+                    columns.Add(new Int32DataFrameColumn(column.Name, length));
                 }
                 else if (type == NumberDataViewType.Int64)
                 {
-                    columns.Add(new PrimitiveDataFrameColumn<long>(column.Name, dataView.GetRowCount() ?? 0));
+                    columns.Add(new Int64DataFrameColumn(column.Name, length));
                 }
                 else if (type == NumberDataViewType.SByte)
                 {
-                    columns.Add(new PrimitiveDataFrameColumn<sbyte>(column.Name, dataView.GetRowCount() ?? 0));
+                    columns.Add(new SByteDataFrameColumn(column.Name, length));
                 }
                 else if (type == NumberDataViewType.Int16)
                 {
-                    columns.Add(new PrimitiveDataFrameColumn<short>(column.Name, dataView.GetRowCount() ?? 0));
+                    columns.Add(new Int16DataFrameColumn(column.Name, length));
                 }
                 else if (type == NumberDataViewType.UInt32)
                 {
-                    columns.Add(new PrimitiveDataFrameColumn<uint>(column.Name, dataView.GetRowCount() ?? 0));
+                    columns.Add(new UInt32DataFrameColumn(column.Name, length));
                 }
                 else if (type == NumberDataViewType.UInt64)
                 {
-                    columns.Add(new PrimitiveDataFrameColumn<ulong>(column.Name, dataView.GetRowCount() ?? 0));
+                    columns.Add(new UInt64DataFrameColumn(column.Name, length));
                 }
                 else if (type == NumberDataViewType.UInt16)
                 {
-                    columns.Add(new PrimitiveDataFrameColumn<ushort>(column.Name, dataView.GetRowCount() ?? 0));
+                    columns.Add(new UInt16DataFrameColumn(column.Name, length));
                 }
                 else if (type == TextDataViewType.Instance)
                 {
-                    columns.Add(new StringDataFrameColumn(column.Name, dataView.GetRowCount() ?? 0));
+                    columns.Add(new StringDataFrameColumn(column.Name, length));
                 }
                 else
                 {
